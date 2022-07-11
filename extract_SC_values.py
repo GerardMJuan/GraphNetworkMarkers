@@ -65,17 +65,6 @@ def par_extract_values(row, subj_dir):
 
     subj_dir_id = f'{subj_dir}/{type_dir}_Post/{subID}'
 
-    """
-    CLINIC OG PART
-    COMMENT IF NEEDED
-    """
-    # for the clinic part   
-    # clinic_og_path = f"/mnt/nascarm01/data/Projectes/MAGNIMS2021/CLINIC/{subID}"
-    # SC_path = f"{clinic_og_path}/r{subID}_SC_raw.csv"
-    # SC_path_raw = f"rFIS_{subID}_SC_raw.csv"
-
-    # names = pd.read_csv(f"{subj_dir_id}/results/centres.txt", header=None, usecols=[0], sep=' ')
-    # names = [x for [x] in names.values]
 
     # patillada pero gl
     idx_G = len(df_G) - 1
@@ -83,9 +72,6 @@ def par_extract_values(row, subj_dir):
 
     df_G.at[idx_G, "SubjID"] = subID
     df_G.at[idx_G, "CENTER"] = type_dir
-    # df_nodes.at[idx_nodes, "SubjID"] = subID
-    # df_nodes.at[idx_nodes, "CENTER"] = type_dir
-
     # load SC and tract length matrices
     SC_path = f"{subj_dir_id}/dt_proc/connectome_weights.csv"
     len_path = f"{subj_dir_id}/dt_proc/connectome_lengths.csv"
@@ -96,78 +82,18 @@ def par_extract_values(row, subj_dir):
     #### NORMALIZE BY LEN
     SC = SC / SC_len
     SC = np.nan_to_num(SC, nan=0, posinf=0, neginf=0)
-    Comm_ratio = np.sum(SC[np.ix_(np.r_[14:45], np.r_[45:76])]) / np.sum(SC)
-    # Comm_ratio = np.sum(SC[np.ix_(np.r_[0:7,14:45], np.r_[7:14,45:76])]) / np.sum(SC)
-    # Comm_ratio = np.sum(SC[np.ix_(np.r_[0:38], np.r_[38:76])])*2 / np.sum(SC)
-    
+    Comm_ratio = np.sum(SC[np.ix_(np.r_[14:45], np.r_[45:76])]) / np.sum(SC)    
     df_G.at[idx_G, f'Comm_ratio'] = Comm_ratio
-
-    # FC
-    """
-    FC_path = f"{subj_dir_id}/fmri_proc_dti/r_matrix.csv"
-    FC = np.loadtxt(FC_path, delimiter=',')
-    # remove all negative weights
-    FC[FC < 0] = 0.0
-
-    FC = FC / np.amax(FC)    
-    
-    FC_left = FC[np.ix_(np.r_[0:7,14:45], np.r_[0:7,14:45])]
-    FC_right = FC[np.ix_(np.r_[7:14,45:76], np.r_[7:14,45:76])]
-    FC_inter = FC[np.ix_(np.r_[0:7,14:45], np.r_[7:14,45:76])]
-    # FC_inter[np.ix_(np.r_[0:7,14:45], np.r_[7:14,45:76])] = 0.0
-
-    FC_left_nx = nx.from_numpy_matrix(FC_left)
-    FC_right_nx = nx.from_numpy_matrix(FC_right)
-    FC_inter_nx = nx.from_numpy_matrix(FC_inter)
-    """
-    
-    # convert zero values to inf
-
-    # load them in networkx
-    # BASE
-    # SC_left = SC[np.ix_(np.r_[0:7,14:45], np.r_[0:7,14:45])]
-    # SC_right = SC[np.ix_(np.r_[7:14,45:76], np.r_[7:14,45:76])]
-    # SC_inter = SC.copy()
-    
-    # CLINIC
-    # SC_right = SC[np.ix_(np.r_[0:38], np.r_[0:38])]
-    # SC_left = SC[np.ix_(np.r_[38:76], np.r_[38:76])]
-    # SC_inter = SC.copy()
 
     # ONLY CORTICAL
     SC_left = SC[np.ix_(np.r_[14:45], np.r_[14:45])]
     SC_right = SC[np.ix_(np.r_[45:76], np.r_[45:76])]
     SC_inter = SC[np.ix_(np.r_[14:76], np.r_[14:76])]
 
-    # SC_inter[np.ix_(np.r_[0:7,14:45], np.r_[7:14,45:76])] = 0.0
-    ### Save to disk the matrices to observe them
-
-    # SC_left = (SC_left / np.sum(SC_left)) / np.amax(SC_left / np.sum(SC_left))
-    # SC_right = (SC_right / np.sum(SC_right)) / np.amax(SC_right / np.sum(SC_right))
-    # SC_inter = (SC_inter / np.sum(SC_inter)) / np.amax(SC_inter / np.sum(SC_inter))
 
     SC_mask_l = SC_left != 0
     SC_mask_r = SC_right != 0
     SC_mask_i = SC_inter != 0
-
-    # SC_left[SC_mask_l] = SC_left[SC_mask_l] / np.amax(SC_left)
-    # SC_right[SC_mask_r] = SC_right[SC_mask_r] / np.amax(SC_right)
-    # SC_inter[SC_mask_i] = SC_inter[SC_mask_i] / np.amax(SC_inter)
-
-    """
-    plt.imshow(SC_left)
-    plt.colorbar()
-    plt.savefig("SC_left.png")
-    plt.close()
-    plt.imshow(SC_right)
-    plt.colorbar()
-    plt.savefig("SC_right.png")
-    plt.close()
-    plt.imshow(SC)
-    plt.colorbar()
-    plt.savefig("SC.png")
-    plt.close()
-    """
 
     SC_left[SC_mask_l] = 1 / SC_left[SC_mask_l]
     SC_right[SC_mask_r] = 1 / SC_right[SC_mask_r]
@@ -185,8 +111,6 @@ def par_extract_values(row, subj_dir):
     pairs_L = [x for x in combinations([x for x in range(len(SC_left))], 2)]
     pairs_R = [x for x in combinations([x for x in range(len(SC_left))], 2)]
     
-    # Base
-    # pairs_inter = [x for x in product(np.r_[0:7,14:45], np.r_[7:14,45:76])]
 
     # ONLY CORTICAL
     pairs_inter = [x for x in product(np.r_[14:45], np.r_[45:76])]
@@ -196,139 +120,11 @@ def par_extract_values(row, subj_dir):
     list_of_names = ["SC_L", "SC_R", "SC_inter"]#, "FC_R", "FC_inter"] #, "Tract"] #, "FC"]
     list_of_pairs = [permutations(SC_left_nx, 2), permutations(SC_right_nx, 2), permutations(SC_inter_nx, 2)]#, pairs_L, pairs_R, pairs_inter]
 
-    # REMOVE EDGES WITH WEIGHT 0
-    # for G in list_of_graphs:
-    #     long_edges = list(filter(lambda e: e[2] == 0, (e for e in G.edges.data('weight'))))
-    #     le_ids = list(e[:2] for e in long_edges)
-        # remove filtered edges from graph G
-    #     G.remove_edges_from(le_ids)
 
     # iterate over the existing graphs, later we could add FC
     for (graph, name, pairs) in zip(list_of_graphs, list_of_names, list_of_pairs):
-        # Compute the various values
-        # and save them depending on if its by node or by general graph
-        # save each value
-        # avg_clus = nx.algorithms.cluster.average_clustering(graph, weight='weight')
-        # df_G.at[idx_G, f'{name}_avg_clus'] = avg_clus
-
-        # avg_clus = nx.algorithms.generic.average_shortest_path_length(graph, weight='weight')
-        # df_G.at[idx_G, f'{name}_avg_spl'] = avg_clus
-
-        """
-        ## Weighted clustering coefficiency
-        ### manual
-        spl = dict(nx.algorithms.shortest_paths.generic.shortest_path_length(graph, weight='weight'))
-        pairs_spl_arr = []
-        npairs = 0
-        for (x, y) in pairs:
-            # if we don't find it, that means that that connection doesnt exist.
-            try:
-                pairs_spl_arr.append(1/spl[x][y])
-            except KeyError:
-                pass
-            npairs += 1
-        spl_avg_pairs = np.sum(pairs_spl_arr) / npairs
-        df_G.at[idx_G, f'{name}_avg_spl'] = spl_avg_pairs
-        """
         df_G.at[idx_G, f'{name}_avg_spl'] = global_efficiency_weighted(graph, pairs)
 
-
-        # for inter, compute it manually
-
-        # i = 0 # i is an indexer, to iterate the nodes of the network and select the names
-        # for n in names:
-        #     df_nodes.at[idx_nodes, f'{name}_{n}_clustering'] = avg_clus_nodes[i]
-        #     i += 1
-
-        ## Average connectivity
-        # NOTE: should be do some kind of thresholding?
-        # avg_conn = nx.algorithms.connectivity.connectivity.average_node_connectivity(graph)
-        # df_G.at[idx_G, f'{name}_avg_conn'] = avg_conn
-
-        ## Global efficiency
-        # average of the inverse shortest path length between all nodes in the network
-        # spl = dict(nx.algorithms.shortest_paths.generic.shortest_path_length(graph, weight='weight'))
-        # df_G.at[idx_G, f'{name}_avg_spl'] = spl_avg
-        
-
-        """
-        L_spl_arr = []
-        R_spl_arr = []
-        pairs_spl_arr = []
-
-        L_glob_arr = []
-        R_glob_arr = []
-        pairs_glob_arr = []
-
-        for (x, y) in pairs_L:
-            L_spl_arr.append(spl[x][y])
-            L_glob_arr.append(1/spl[x][y])
-        for (x, y) in pairs_R:
-            R_spl_arr.append(spl[x][y])
-            R_glob_arr.append(1/spl[x][y])
-        for (x, y) in pairs_inter:
-            pairs_spl_arr.append(spl[x][y])
-            pairs_glob_arr.append(1/spl[x][y])
-
-        global_efficiency_L = np.sum(L_glob_arr) / len(L_glob_arr)
-        spl_avg_L = np.sum(L_spl_arr) / len(L_spl_arr)
-
-        global_efficiency_R = np.sum(R_glob_arr) / len(R_glob_arr)
-        spl_avg_R = np.sum(R_spl_arr) / len(R_spl_arr)
-
-        global_efficiency_pairs = np.sum(pairs_glob_arr) / len(pairs_glob_arr)
-        spl_avg_pairs = np.sum(pairs_spl_arr) / len(pairs_spl_arr)
-
-        # spl_avg = np.sum(L_spl_arr + R_spl_arr + pairs_spl_arr) / ( len(L_spl_arr) + len(R_spl_arr) + len(pairs_spl_arr) )
-
-        df_G.at[idx_G, f'{name}_avg_conn_L'] = global_efficiency_L
-        df_G.at[idx_G, f'{name}_avg_spl_L'] = spl_avg_L
-
-        df_G.at[idx_G, f'{name}_avg_conn_R'] = global_efficiency_R
-        df_G.at[idx_G, f'{name}_avg_spl_R'] = spl_avg_R
-        
-        df_G.at[idx_G, f'{name}_avg_conn_pairs'] = global_efficiency_pairs
-        df_G.at[idx_G, f'{name}_avg_spl_pairs'] = spl_avg_pairs
-        """
-
-        ## Centrality
-        ## do we need 
-        # centrality = nx.algorithms.centrality.degree_centrality(graph)
-        # i = 0 # i is an indexer, to iterate the nodes of the network and select the names
-        # for n in names:
-        #     df_nodes.at[idx_nodes, f'{name}_{n}_centrality'] = centrality[i]
-        #     i += 1
-
-        ## Eigenvector Centrality
-        # centrality = nx.algorithms.centrality.eigenvector_centrality(graph, weight='weight', max_iter=500)
-        # i = 0 # i is an indexer, to iterate the nodes of the network and select the names
-        # for n in names:
-        #     df_nodes.at[idx_nodes, f'{name}_{n}_eigen_centrality'] = centrality[i]
-        #     i += 1
-
-        ## Modularity:
-        # Find best partition and compute modularity of the graph
-        # partition = best_partition(graph, weight='weight')
-        # mod = modularity(partition, graph, weight='weight')
-        # df_G.at[idx_G, f'{name}_modularity'] = mod
-
-        ## Small world omega
-        # we already have clustering and short path lengths
-        # generate the random and lattice graphs, and compute the 
-        
-        # average shortest path length of an equivalent random graph
-        # rd_graph = nx.algorithms.smallworld.random_reference(graph)
-        # L_r = nx.algorithms.average_shortest_path_length(rd_graph, weight='weight')
-
-        # Cl is the average clustering coefficient of an equivalent lattice graph.
-        # lt_graph = nx.algorithms.smallworld.lattice_reference(graph)
-        # C_l = nx.algorithms.cluster.average_clustering(lt_graph, weight='weight')
-
-        # compute omega small world
-        # omega_sw = L_r/spl_avg - avg_clus/C_l
-        # df_G.at[idx_G, f'{name}_smallworld'] = omega_sw
-    
-    # return (df_G, df_nodes)
     return df_G
 
 
