@@ -14,12 +14,10 @@ import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
 from joblib import Parallel, delayed
-from community import best_partition, modularity
 from itertools import combinations, product
-import networkx as nx
 from itertools import permutations
 
-def par_extract_corr(row, subj_dir):
+def par_extract_corr(row):
     """
     Extract the correlations for both matrices
     
@@ -31,8 +29,11 @@ def par_extract_corr(row, subj_dir):
 
     print(subID + " " + type_dir)
 
-    # subj_dir_id = f'{subj_dir}/{type_dir}_Post/{subID}'
-    subj_dir_id = f'/mnt/Bessel/Gproj/Gerard_DATA/MAGNIMS2021/output_fmri_dti/{type_dir}_{subID}'
+    subj_dir_id = subj_dir_id = f'C:/Users/gerar/Documents/output_fmri_dti/{type_dir}_{subID}'
+    #subj_dir_id = f'/mnt/Bessel/Gproj/Gerard_DATA/MAGNIMS2021/output_fmri_dti/{type_dir}_{subID}'
+    #subj_dir_id = f'C:/Users/gerar/Documents/output_CONN/{type_dir}_{subID}'
+    #if not os.path.isfile(subj_dir_id+'/results/r_matrix.csv'): subj_dir_id = f'C:/Users/gerar/Documents/output_fmri_dti/{type_dir}_{subID}'
+    
     # patillada pero gl
     idx_G = len(df_G) - 1
     # idx_nodes = len(df_nodes) - 1
@@ -43,20 +44,21 @@ def par_extract_corr(row, subj_dir):
     ### FC
     FC_path = f"{subj_dir_id}/results/r_matrix.csv"
     FC = np.loadtxt(FC_path, delimiter=',')
-
     # ONLY CORTICAL
-    # FC_left = FC[np.ix_(np.r_[14:45], np.r_[14:45])]
-    # FC_right = FC[np.ix_(np.r_[45:76], np.r_[45:76])]
-    # FC_inter = FC[np.ix_(np.r_[14:76], np.r_[14:76])]
+    FC_left = FC[np.ix_(np.r_[14:45], np.r_[14:45])]
+    FC_right = FC[np.ix_(np.r_[45:76], np.r_[45:76])]
+    FC_inter = FC[np.ix_(np.r_[14:45], np.r_[45:76])]
 
     # CORTICAL AND SUBCORTICAL
-    FC_left = FC[np.ix_(np.r_[0:7,14:45], np.r_[0:7,14:45])]
-    FC_right = FC[np.ix_(np.r_[7:14,45:76], np.r_[7:14,45:76])]
-    FC_inter = FC[np.ix_(np.r_[0:7,14:45], np.r_[7:14,45:76])]
+    #FC_left = FC[np.ix_(np.r_[0:7,14:45], np.r_[0:7,14:45])]
+    #FC_right = FC[np.ix_(np.r_[7:14,45:76], np.r_[7:14,45:76])]
+    #FC_inter = FC[np.ix_(np.r_[0:7,14:45], np.r_[7:14,45:76])]
 
     # Compute mean correlations
-    FC_Corr_intra = (np.mean(FC_left) + np.mean(FC_right)) / 2
-    FC_Corr_inter = np.mean(FC_inter)
+    # mean of all the values of the superior triangle, without the diagonal
+    FC_Corr_intra = np.mean(FC_left[np.triu_indices(FC_left.shape[0], 1)])
+    #ONLY homotopic connections
+    FC_Corr_inter = np.mean([FC_inter[i,i] for i in range(len(FC_inter))])
     df_G["FC_Corr_inter"] = FC_Corr_inter
     df_G["FC_Corr_intra"] = FC_Corr_intra
 
@@ -74,16 +76,21 @@ def par_extract_corr(row, subj_dir):
     # ONLY CORTICAL
     SC_left = SC[np.ix_(np.r_[14:45], np.r_[14:45])]
     SC_right = SC[np.ix_(np.r_[45:76], np.r_[45:76])]
-    SC_inter = SC[np.ix_(np.r_[14:76], np.r_[14:76])]
+    SC_inter = SC[np.ix_(np.r_[14:45], np.r_[45:76])]
 
     # CORTICAL AND SUBCORTICAL
-    SC_left = SC[np.ix_(np.r_[0:7,14:45], np.r_[0:7,14:45])]
-    SC_right = SC[np.ix_(np.r_[7:14,45:76], np.r_[7:14,45:76])]
-    SC_inter = SC[np.ix_(np.r_[0:7,14:45], np.r_[7:14,45:76])]
+    #SC_left = SC[np.ix_(np.r_[0:7,14:45], np.r_[0:7,14:45])]
+    #SC_right = SC[np.ix_(np.r_[7:14,45:76], np.r_[7:14,45:76])]
+    #SC_inter = SC[np.ix_(np.r_[0:7,14:45], np.r_[7:14,45:76])]
 
     # Compute mean connections
-    SC_Corr_intra = (np.mean(SC_left) + np.mean(SC_right)) / 2
-    SC_Corr_inter = np.mean(SC_inter)
+    # SC_Corr_intra = (np.mean(SC_left) + np.mean(SC_right)) / 2
+    SC_Corr_intra = np.mean(SC_left[np.triu_indices(SC_left.shape[0], 1)])
+
+    # SC_Corr_inter = np.mean(SC_inter)
+    #ONLY homotopic connections
+    SC_Corr_inter = np.mean([SC_inter[i,i] for i in range(len(SC_inter))])
+
     df_G["SC_Corr_inter"] = SC_Corr_inter
     df_G["SC_Corr_intra"] = SC_Corr_intra
 
@@ -91,14 +98,13 @@ def par_extract_corr(row, subj_dir):
     return df_G
 
 # python intra_inter_corr.py --total_csv /home/extop/GERARD/DATA/MAGNIMS2021/data_total.csv --pip_csv /home/extop/GERARD/DATA/MAGNIMS2021/pipeline.csv --out_csv_prefix  /home/extop/GERARD/DATA/MAGNIMS2021/graph_values/graph --njobs 1 /home/extop/GERARD/DATA/MAGNIMS2021
-
+# python intra_inter_corr.py --total_csv C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/data_total.csv --pip_csv C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/pipeline.csv --out_csv_prefix  C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/graph_values/graph --njobs 1
 @click.command(help="Run over the existing subjects, load the networks and extract their values.")
 @click.option("--total_csv", required=True, type=click.STRING, help="csv with the base information for every subject")
 @click.option("--pip_csv", required=True, type=click.STRING, help="csv with the current pipeline information for every subject")
 @click.option("--out_csv_prefix", required=True, type=click.STRING, help="Output csv prefix. Will output various csv files")
 @click.option("--njobs", required=True, type=click.STRING, help="number of jobs")
-@click.argument("subj_dir")
-def intra_inter_corr(subj_dir, total_csv, pip_csv, out_csv_prefix, njobs):
+def intra_inter_corr(total_csv, pip_csv, out_csv_prefix, njobs):
     """
     Compute T1 values
     """
@@ -113,7 +119,7 @@ def intra_inter_corr(subj_dir, total_csv, pip_csv, out_csv_prefix, njobs):
     njobs = int(njobs)
 
     # at least dt status, so that we have processed lesions volumes
-    results = [par_extract_corr(row, subj_dir) for row in df_total.itertuples()\
+    results = [par_extract_corr(row) for row in df_total.itertuples()\
                 if df_pipeline[(df_pipeline.id==row.SubjID) & (df_pipeline.CENTER==row.CENTER)]["agg_SC"].bool() &
                    df_pipeline[(df_pipeline.id==row.SubjID) & (df_pipeline.CENTER==row.CENTER)]["fMRI"].bool()]
 

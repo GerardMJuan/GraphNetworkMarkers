@@ -11,12 +11,13 @@ import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
 from joblib import Parallel, delayed
-from community import best_partition, modularity
+# from community import best_partition, modularity
 from itertools import combinations, product
 import networkx as nx
 from itertools import permutations
 
 # python extract_FC_values.py --total_csv /home/extop/GERARD/DATA/MAGNIMS2021/data_total.csv --pip_csv /home/extop/GERARD/DATA/MAGNIMS2021/pipeline.csv --out_csv_prefix  /home/extop/GERARD/DATA/MAGNIMS2021/graph_values/graph --njobs 1 /home/extop/GERARD/DATA/MAGNIMS2021
+# python extract_FC_values.py --total_csv C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/data_total.csv --pip_csv C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/pipeline.csv --out_csv_prefix  C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/graph_values/graph --njobs 1 C:/Users/gerar/Documents/output_CONN
 
 def global_efficiency_weighted(G, pairs):
     """
@@ -49,6 +50,7 @@ def par_extract_values(row, subj_dir):
     print(subID + " " + type_dir)
 
     subj_dir_id = f'{subj_dir}/{type_dir}_Post/{subID}'
+    if not os.path.isfile(subj_dir_id+'/results/r_matrix.csv'): subj_dir_id = f'C:/Users/gerar/Documents/output_fmri_dti/{type_dir}_{subID}'
 
     # patillada pero gl
     idx_G = len(df_G) - 1
@@ -58,13 +60,13 @@ def par_extract_values(row, subj_dir):
     df_G.at[idx_G, "CENTER"] = type_dir
 
     # FC
-    FC_path = f"{subj_dir_id}/fmri_proc_dti/r_matrix.csv"
+    FC_path = f"{subj_dir_id}/results/r_matrix.csv"
     FC = np.loadtxt(FC_path, delimiter=',')
 
     # threshold and create graph 
     #tenth_percentile = np.percentile(FC, 90)
     #print(tenth_percentile)
-    FC = np.where(FC>0, 1, 0)
+    FC = np.where(FC>0.5, 1, 0)
     
     # ONLY CORTICAL
     FC_left = FC[np.ix_(np.r_[14:45], np.r_[14:45])]
