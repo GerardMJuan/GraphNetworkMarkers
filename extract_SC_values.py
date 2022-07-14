@@ -90,7 +90,6 @@ def par_extract_values(row, subj_dir):
     SC_right = SC[np.ix_(np.r_[45:76], np.r_[45:76])]
     SC_inter = SC[np.ix_(np.r_[14:76], np.r_[14:76])]
 
-
     SC_mask_l = SC_left != 0
     SC_mask_r = SC_right != 0
     SC_mask_i = SC_inter != 0

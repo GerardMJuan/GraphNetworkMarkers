@@ -50,7 +50,6 @@ def par_extract_values(row, subj_dir):
 
     subj_dir_id = f'{subj_dir}/{type_dir}_Post/{subID}'
 
-
     # patillada pero gl
     idx_G = len(df_G) - 1
     # idx_nodes = len(df_nodes) - 1
