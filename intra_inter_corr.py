@@ -29,11 +29,14 @@ def par_extract_corr(row):
 
     print(subID + " " + type_dir)
 
-    subj_dir_id = subj_dir_id = f'C:/Users/gerar/Documents/output_fmri_dti/{type_dir}_{subID}'
-    #subj_dir_id = f'/mnt/Bessel/Gproj/Gerard_DATA/MAGNIMS2021/output_fmri_dti/{type_dir}_{subID}'
+    #subj_dir_id = subj_dir_id = f'C:/Users/gerar/Documents/output_fmri_dti/{type_dir}_{subID}'
+    # subj_dir_id = f'/mnt/Bessel/Gproj/Gerard_DATA/MAGNIMS2021/output_fmri_dti/{type_dir}_{subID}'
     #subj_dir_id = f'C:/Users/gerar/Documents/output_CONN/{type_dir}_{subID}'
     #if not os.path.isfile(subj_dir_id+'/results/r_matrix.csv'): subj_dir_id = f'C:/Users/gerar/Documents/output_fmri_dti/{type_dir}_{subID}'
     
+    subj_dir_id = f'/mnt/Bessel/Gproj/Gerard_DATA/MAGNIMS2021/output_CONN/{type_dir}_{subID}'
+    if not os.path.isfile(subj_dir_id+'/results/r_matrix.csv'): subj_dir_id = f'/mnt/Bessel/Gproj/Gerard_DATA/MAGNIMS2021/output_fmri_dti/{type_dir}_{subID}'
+    else: print("yes conn")
     # patillada pero gl
     idx_G = len(df_G) - 1
     # idx_nodes = len(df_nodes) - 1
@@ -97,7 +100,7 @@ def par_extract_corr(row):
 
     return df_G
 
-# python intra_inter_corr.py --total_csv /home/extop/GERARD/DATA/MAGNIMS2021/data_total.csv --pip_csv /home/extop/GERARD/DATA/MAGNIMS2021/pipeline.csv --out_csv_prefix  /home/extop/GERARD/DATA/MAGNIMS2021/graph_values/graph --njobs 1 /home/extop/GERARD/DATA/MAGNIMS2021
+# python intra_inter_corr.py --total_csv /home/extop/GERARD/DATA/MAGNIMS2021/data_total.csv --pip_csv /home/extop/GERARD/DATA/MAGNIMS2021/pipeline.csv --out_csv_prefix  /home/extop/GERARD/DATA/MAGNIMS2021/graph_values/graph --njobs 1
 # python intra_inter_corr.py --total_csv C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/data_total.csv --pip_csv C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/pipeline.csv --out_csv_prefix  C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/graph_values/graph --njobs 1
 @click.command(help="Run over the existing subjects, load the networks and extract their values.")
 @click.option("--total_csv", required=True, type=click.STRING, help="csv with the base information for every subject")
