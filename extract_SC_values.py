@@ -61,8 +61,6 @@ def global_efficiency_weighted_inverse(G, pairs):
         g_eff = 0
     return g_eff
 
-
-
 def par_extract_values(row, subj_dir, cortical):
     """
     Auxiliar function to parallelize the extraction of values
@@ -105,6 +103,7 @@ def par_extract_values(row, subj_dir, cortical):
         SC_left = SC[np.ix_(np.r_[14:45], np.r_[14:45])]
         SC_right = SC[np.ix_(np.r_[45:76], np.r_[45:76])]
         SC_inter = SC[np.ix_(np.r_[14:45], np.r_[45:76])]
+        SC = SC[np.ix_(np.r_[14:76], np.r_[14:76])]
     else:
         SC_left = SC[np.ix_(np.r_[0:7,14:45], np.r_[0:7,14:45])]
         SC_right = SC[np.ix_(np.r_[7:14,45:76], np.r_[7:14,45:76])]

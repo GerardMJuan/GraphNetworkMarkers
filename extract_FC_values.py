@@ -121,6 +121,11 @@ def par_extract_values(row, subj_dir, th, cortical):
     print(subID + " " + type_dir)
     subj_dir_id = f'{subj_dir}/{type_dir}_{subID}'
 
+    # iterate over all existing FC in that directory
+    # plus the average one 
+    # create auxiliar function that, for a given FC/timeseries, computes all the values,
+    # saves it in a dict, and returns it
+    
     try:
         # FC
         FC_path = f"{subj_dir_id}/results/r_matrix.csv"
@@ -227,6 +232,10 @@ def compute_FC_values(subj_dir, total_csv, pip_csv, out_csv_prefix, njobs, th, c
     # df_nodes = pd.DataFrame()
 
     njobs = int(njobs)
+
+    # load the study
+
+
 
     # at least dt status, so that we have processed lesions volumes
     # HACK: SELECT ONLY 5 SUBJECTS, TO TEST
