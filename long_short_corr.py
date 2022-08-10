@@ -98,6 +98,7 @@ def par_extract_values(row, subj_dir, cortical, quartiles_dict):
     # ONLY CORTICAL
     if cortical:
         SC = SC[np.ix_(np.r_[14:76], np.r_[14:76])]
+        SC_len = SC_len[np.ix_(np.r_[14:76], np.r_[14:76])]
         FC = FC[np.ix_(np.r_[14:76], np.r_[14:76])]
 
     # select the nodes
@@ -125,6 +126,7 @@ def par_extract_values(row, subj_dir, cortical, quartiles_dict):
 
     return df_G
 
+# python long_short_corr.py --total_csv C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/data_total.csv --pip_csv C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/pipeline.csv --out_csv_prefix  C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/graph_values/long_short_dti --njobs 1 C:/Users/gerar/Documents/output_dti_fmri
 # python long_short_corr.py --total_csv C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/data_total.csv --pip_csv C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/pipeline.csv --out_csv_prefix  C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/graph_values/long_short_dti --njobs 1 C:/Users/gerar/Documents/output_dti_fmri
 
 @click.command(help="Run over the existing subjects, load the networks and extract their values.")

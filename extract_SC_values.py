@@ -26,8 +26,8 @@ from community import best_partition, modularity
 from itertools import combinations, product
 import networkx as nx
 from itertools import permutations
-
-# python extract_SC_values.py --total_csv /home/extop/GERARD/DATA/MAGNIMS2021/data_total.csv --pip_csv /home/extop/GERARD/DATA/MAGNIMS2021/pipeline.csv --out_csv_prefix  /home/extop/GERARD/DATA/MAGNIMS2021/graph_values/graph_dti --njobs 1 /home/extop/GERARD/DATA/MAGNIMS2021
+from copy import deepcopy
+# python extract_SC_values.py --total_csv /mnt/Bessel/Gproj/Gerard_DATA/MAGNIMS_DEFINITIVE_RESULTS/data_total.csv --pip_csv /mnt/Bessel/Gproj/Gerard_DATA/MAGNIMS_DEFINITIVE_RESULTS/pipeline.csv --out_csv_prefix  /mnt/Bessel/Gproj/Gerard_DATA/MAGNIMS_DEFINITIVE_RESULTS/graph_values/graph_CONN --njobs 1 /home/extop/GERARD/DATA/MAGNIMS2021/output_CONN --cortical
 
 def global_efficiency_weighted(G, pairs):
     """
@@ -76,7 +76,7 @@ def par_extract_values(row, subj_dir, cortical):
 
     print(subID + " " + type_dir)
 
-    subj_dir_id = f'{subj_dir}/{type_dir}_Post/{subID}'
+    subj_dir_id = f'{subj_dir}/{type_dir}_{subID}'
 
     # patillada pero gl
     idx_G = len(df_G) - 1
@@ -86,8 +86,8 @@ def par_extract_values(row, subj_dir, cortical):
     df_G.at[idx_G, "CENTER"] = type_dir
 
     # load SC and tract length matrices
-    SC_path = f"{subj_dir_id}/results/{subID}_SC_weights_nonorm.txt"
-    len_path = f"{subj_dir_id}/results/{subID}_SC_distances.txt"
+    SC_path = f"{subj_dir_id}/results/{type_dir}_{subID}_SC_weights_nonorm.txt"
+    len_path = f"{subj_dir_id}/results/{type_dir}_{subID}_SC_distances.txt"
 
     SC = np.loadtxt(open(SC_path, "rb"), skiprows=0)
     SC_len = np.loadtxt(open(len_path, "rb"), skiprows=0)
@@ -141,8 +141,8 @@ def par_extract_values(row, subj_dir, cortical):
 
     # iterate over the existing graphs, later we could add FC
     for (graph, name, pairs) in zip(list_of_graphs, list_of_names, list_of_pairs):
-        df_G.at[idx_G, f'{name}_avg_spl'] = global_efficiency_weighted(graph, pairs)
-        df_G.at[idx_G, f'{name}_avg_eff'] = global_efficiency_weighted_inverse(graph, pairs)
+        df_G.at[idx_G, f'{name}_avg_spl'] = global_efficiency_weighted(deepcopy(graph), deepcopy(pairs))
+        df_G.at[idx_G, f'{name}_avg_eff'] = global_efficiency_weighted_inverse(deepcopy(graph), deepcopy(pairs))
 
     return df_G
 

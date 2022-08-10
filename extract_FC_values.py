@@ -135,7 +135,7 @@ def par_extract_values(row, subj_dir, th, cortical):
         timeseries = f"{subj_dir_id}/results/corrlabel_ts.txt"
         timeseries = np.loadtxt(timeseries)
         timeseries = timeseries.T
-    except FileNotFoundError:
+    except OSError:
         # això es suficient per fer les que estan completes?
         print(f'{subID}_{type_dir} not found!')
         return df_G
@@ -164,6 +164,7 @@ def par_extract_values(row, subj_dir, th, cortical):
 
     FC_Corr_intra_L = np.mean(FC_left[np.triu_indices(FC_left.shape[0], 1)])
     FC_Corr_intra_R = np.mean(FC_right[np.triu_indices(FC_right.shape[0], 1)])
+    
     #ONLY homotopic connections
     FC_Corr_inter = np.mean([FC_inter[i,i] for i in range(len(FC_inter))])
 
@@ -222,7 +223,7 @@ def compute_FC_values(subj_dir, total_csv, pip_csv, out_csv_prefix, njobs, th, c
     """
     Compute FC values
     """
-
+    
     # iterate over the subjects
     df_total = pd.read_csv(total_csv)
     df_pipeline = pd.read_csv(pip_csv)
