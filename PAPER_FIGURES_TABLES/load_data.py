@@ -97,7 +97,6 @@ def load_data(root='linux'):
     df_final = df_total.merge(df_extracted, on=["SubjID", "CENTER"])
     df_final = df_final.merge(df_fullgraph, on=["SubjID", "CENTER"])
 
-
     df_final = process_data(df_final)
 
     return df_final
