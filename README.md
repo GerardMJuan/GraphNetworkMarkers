@@ -21,5 +21,5 @@ Scripts to extract meaningful values of brain SC and FC networks.
 * 
 
 ## Credits
-Me
-And the creators of the codes and packages used here:
+Gerard M
+And the creators of the codes and packages used here.

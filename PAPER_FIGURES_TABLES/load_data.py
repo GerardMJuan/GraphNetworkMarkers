@@ -40,8 +40,10 @@ def process_data(df, cs=False):
     df["SC_eff_full"] = ( df["SC_L_avg_eff"] + df["SC_R_avg_eff"] ) / 2
 
     df["FC_spl_full"] = ( df["FC_L_avg_spl"] + df["FC_R_avg_spl"] ) / 2
-
     df["FC_eff_full"] = ( df["FC_L_efficiency"] + df["FC_R_efficiency"] ) / 2
+    df["FC_entropy_full"] = ( df["Entropy_L"] + df["Entropy_R"] ) / 2
+    df["FC_integration_full"] = ( df["Integration_L"] + df["Integration_R"] ) / 2
+
     df["Full_CC"] = df["CC_Posterior"] + df["CC_Mid_Posterior"] + df["CC_Central"] + df["CC_Mid_Anterior"] + df["CC_Anterior"]
     df["Comm_ratio_approx"] = ( df["CC_Posterior"] + df["CC_Mid_Posterior"] + df["CC_Central"] + df["CC_Mid_Anterior"] + df["CC_Anterior"] ) / df["EstimatedTotalIntraCranialVol"]
     df["CC_ratio_area"] = np.sqrt(df["CC_Sag_area"]) / (df["BrainSegVol"]**(1./3.))
