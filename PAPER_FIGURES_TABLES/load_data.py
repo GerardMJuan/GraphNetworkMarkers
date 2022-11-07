@@ -31,7 +31,7 @@ def process_data(df, cs=False):
     }
 
     df['disease'] = np.where(df['GROUP']=='HC', "HC", "MS")
-    df['EDSS_group'] = np.where(df['EDSS'] < 3, "EDSS<3", "EDSS>=3")
+    df['EDSS_group'] = np.where(df['EDSS'] <= 3, "EDSS<=3", "EDSS>3")
     df['SDMT_group'] = np.where(df['SDMT'] < 40, "SDMT<40", "SDMT>=40")
     df['GROUP_prog'] = df.GROUP.map(mapping_prog)
 
@@ -61,7 +61,7 @@ def load_data(root='linux'):
     
     ## PATHS
     if root == 'linux':
-        root = '/mnt/Bessel/Gproj/Gerard_DATA/MAGNIMS_DEFINITIVE_RESULTS'
+        root = '/home/gerard/VHIR/MAGNIMS_DEFINITIVE_RESULTS'
     else:
         root = 'C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/'
 
