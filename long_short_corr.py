@@ -126,8 +126,6 @@ def par_extract_values(row, subj_dir, cortical, quartiles_dict):
 
     return df_G
 
-# python long_short_corr.py --total_csv C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/data_total.csv --pip_csv C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/pipeline.csv --out_csv_prefix  C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/graph_values/long_short_dti --njobs 1 C:/Users/gerar/Documents/output_dti_fmri
-# python long_short_corr.py --total_csv C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/data_total.csv --pip_csv C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/pipeline.csv --out_csv_prefix  C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/graph_values/long_short_dti --njobs 1 C:/Users/gerar/Documents/output_dti_fmri
 
 @click.command(help="Run over the existing subjects, load the networks and extract their values.")
 @click.option("--total_csv", required=True, type=click.STRING, help="csv with the base information for every subject")

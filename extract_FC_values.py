@@ -20,12 +20,6 @@ from scipy.stats import entropy
 from sklearn.metrics import auc
 from scipy.signal import hilbert
 
-# python extract_FC_values.py --total_csv /home/extop/GERARD/DATA/MAGNIMS2021/data_total.csv --pip_csv /home/extop/GERARD/DATA/MAGNIMS2021/pipeline.csv --out_csv_prefix  /home/extop/GERARD/DATA/MAGNIMS2021/graph_values/graph_dti --njobs 1 --th 0.5 /mnt/Bessel/Gproj/Gerard_DATA/MAGNIMS2021/output_fmri_dti
-# python extract_FC_values.py --total_csv C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/data_total.csv --pip_csv C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/pipeline.csv --out_csv_prefix  C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/graph_values/graph --njobs 1 C:/Users/gerar/Documents/output_CONN
-
-
-# python extract_FC_values.py --total_csv /mnt/Bessel/Gproj/Gerard_DATA/MAGNIMS_DEFINITIVE_RESULTS/data_total.csv --pip_csv /mnt/Bessel/Gproj/Gerard_DATA/MAGNIMS_DEFINITIVE_RESULTS/pipeline.csv --out_csv_prefix  /mnt/Bessel/Gproj/Gerard_DATA/MAGNIMS_DEFINITIVE_RESULTS/graph_values/graph_CONN --njobs 1 /home/extop/GERARD/DATA/MAGNIMS2021/output_CONN --cortical
-
 
 def remove_mean(x, axis):
     """

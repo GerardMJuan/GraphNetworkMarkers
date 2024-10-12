@@ -28,10 +28,6 @@ import networkx as nx
 from itertools import permutations
 from copy import deepcopy
 
-
-# python extract_SC_values.py --total_csv /mnt/Bessel/Gproj/Gerard_DATA/MAGNIMS_DEFINITIVE_RESULTS/data_total.csv --pip_csv /mnt/Bessel/Gproj/Gerard_DATA/MAGNIMS_DEFINITIVE_RESULTS/pipeline.csv --out_csv_prefix  /mnt/Bessel/Gproj/Gerard_DATA/MAGNIMS_DEFINITIVE_RESULTS/graph_values/graph_CONN --njobs 1 /home/extop/GERARD/DATA/MAGNIMS2021/output_CONN --cortical
-
-
 def global_efficiency_weighted(G, pairs):
     """
     Compute global efficiency.

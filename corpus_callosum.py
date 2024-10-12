@@ -14,8 +14,6 @@ import numpy as np
 import datetime
 import pandas as pd
 
-# python corpus_callosum.py --total_csv /home/extop/GERARD/DATA/MAGNIMS2021/data_total.csv --pip_csv /home/extop/GERARD/DATA/MAGNIMS2021/pipeline.csv --out_csv  /home/extop/GERARD/DATA/MAGNIMS2021/cc.csv /home/extop/GERARD/DATA/MAGNIMS2021
-
 @click.command(help="Run over the existing subjects, load the networks and extract their values.")
 @click.option("--total_csv", required=True, type=click.STRING, help="csv with the base information for every subject")
 @click.option("--pip_csv", required=True, type=click.STRING, help="csv with the current pipeline information for every subject")

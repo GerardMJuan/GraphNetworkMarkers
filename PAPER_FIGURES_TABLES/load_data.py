@@ -113,9 +113,9 @@ def load_data(root="linux"):
 
     ## PATHS
     if root == "linux":
-        root = "/home/gerard/VHIR/MAGNIMS_DEFINITIVE_RESULTS"
+        root = ""
     else:
-        root = "C:/Users/gerar/Documents/MAGNIMS_DEFINITIVE_RESULTS/"
+        root = ""
 
     fc_type = "conn"  # either conn or dti
     conn_type = "DeltaMeta"  # only uset for conn, either "Corr" or "DeltaMeta"
